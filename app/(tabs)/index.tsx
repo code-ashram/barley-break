@@ -1,101 +1,40 @@
-import {Image, StyleSheet, Platform} from 'react-native';
+import { StyleSheet, Pressable } from 'react-native'
 
-import {HelloWave} from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import {ThemedText} from '@/components/ThemedText';
 import {ThemedView} from '@/components/ThemedView';
-import {Colors} from "@/constants/Colors";
+import { Ionicons } from '@expo/vector-icons';
+import { generateNewBoard } from '@/utils'
+import { useState } from 'react'
+import { TileType } from '@/models/models'
+import { Button } from 'react-native-paper'
 
-export default function HomeScreen() {
+const HomeScreen = () => {
+  const [board, setBoard] = useState<TileType[]>(generateNewBoard())
+
+  const handleResetBoard = () => {
+    setBoard(generateNewBoard())
+  }
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title">Barley Break</ThemedText>
 
-      <ThemedView style={styles.board}>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            1
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            2
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            3
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            4
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            5
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            6
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            7
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            8
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            9
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            10
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            11
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            13
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            13
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            14
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.tile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
-            15
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.emptyTile}>
-          <ThemedText style={styles.tileNumber} type='subtitle'>
+      <ThemedView style={styles.steps}>
+        <ThemedText type="title">Your steps: 0</ThemedText>
 
-          </ThemedText>
-        </ThemedView>
+        <Button mode="contained" buttonColor="#336edc" onPress={handleResetBoard}>
+          <Ionicons name="reload" size={22} color="white" />
+        </Button>
       </ThemedView>
 
-      <ThemedView style={styles.steps}>
-        <ThemedText type="title">Your steps: 12</ThemedText>
+      <ThemedView style={styles.board}>
+        {board.map((tile) =>
+          <ThemedView style={tile.id ? styles.tile : styles.emptyTile}>
+            <ThemedText style={styles.tileNumber} type='subtitle'>
+              {tile.id ? tile.id : ''}
+            </ThemedText>
+          </ThemedView>
+        )}
       </ThemedView>
 
     </ThemedView>
@@ -107,6 +46,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 50,
+    paddingHorizontal: 15,
+    flexGrow: 1
   },
   board: {
     display: 'flex',
@@ -141,6 +82,21 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   steps: {
-    marginTop: 30
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 30,
+    width: '100%',
+  },
+  button: {
+    marginLeft: 20,
+    padding: 20,
+    backgroundColor: '#336edc',
+    borderRadius: 7
+  },
+  buttonText: {
+    fontSize: 22
   }
 });
+
+export default HomeScreen
