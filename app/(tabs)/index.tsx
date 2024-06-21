@@ -1,18 +1,34 @@
 import { StyleSheet, Pressable } from 'react-native'
 
-import {ThemedText} from '@/components/ThemedText';
-import {ThemedView} from '@/components/ThemedView';
-import { Ionicons } from '@expo/vector-icons';
+import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/ThemedView'
+import { Ionicons } from '@expo/vector-icons'
 import { generateNewBoard } from '@/utils'
 import { useState } from 'react'
-import { TileType } from '@/models/models'
+import { Tile } from '@/models/models'
 import { Button } from 'react-native-paper'
+import TileBar from '@/components/Tile'
 
 const HomeScreen = () => {
-  const [board, setBoard] = useState<TileType[]>(generateNewBoard())
+  const [board, setBoard] = useState<Tile[]>(generateNewBoard())
 
   const handleResetBoard = () => {
     setBoard(generateNewBoard())
+  }
+
+  const handleSwapTiles = (target: Tile): void => {
+    const source = board.find((tile) => tile.id === 0)
+
+    if (target.position.x === source?.position.x || target.position.y === source?.position.y) {
+      const sourceIdx = board.indexOf(source)
+      const targetIdx = board.indexOf(target)
+
+      let tempBoard: Tile[] = [...board]
+      //   [tempBoard[sourceIdx], tempBoard[targetIdx]] = [{ ...target, position: source.position }, { ...source, position: target.position }]
+      tempBoard.splice(targetIdx, 1, { ...source, position: target.position })
+      tempBoard.splice(sourceIdx, 1, { ...target, position: source.position })
+      setBoard(tempBoard)
+    }
   }
 
   return (
@@ -29,11 +45,7 @@ const HomeScreen = () => {
 
       <ThemedView style={styles.board}>
         {board.map((tile) =>
-          <ThemedView style={tile.id ? styles.tile : styles.emptyTile}>
-            <ThemedText style={styles.tileNumber} type='subtitle'>
-              {tile.id ? tile.id : ''}
-            </ThemedText>
-          </ThemedView>
+          <TileBar key={tile.id} tile={tile} onTap={handleSwapTiles} />
         )}
       </ThemedView>
 
@@ -57,36 +69,14 @@ const styles = StyleSheet.create({
     width: 360,
     height: 360,
     borderWidth: 2,
-    borderColor: 'wheat',
-  },
-  tile: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 89,
-    height: 89,
-    borderWidth: 1,
-    borderColor: 'white',
-  },
-  emptyTile: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#3a3c3e',
-    width: 89,
-    height: 89,
-    borderWidth: 1,
-    borderColor: 'white',
-  },
-  tileNumber: {
-    fontSize: 40,
+    borderColor: 'wheat'
   },
   steps: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 30,
-    width: '100%',
+    width: '100%'
   },
   button: {
     marginLeft: 20,
@@ -97,6 +87,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 22
   }
-});
+})
 
 export default HomeScreen

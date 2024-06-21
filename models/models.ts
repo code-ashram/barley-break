@@ -1,9 +1,10 @@
-export type TileType = {
+export type Tile = {
   id: number
   position: Position
 }
 
-type Position = {
+export type Position = {
   x: number
   y: number
 }
+
