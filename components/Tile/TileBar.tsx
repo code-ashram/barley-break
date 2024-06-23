@@ -4,7 +4,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
 
-import { Tile } from '@/models/models'
+import { Tile } from '@/models'
 
 type Props = {
   tile: Tile
