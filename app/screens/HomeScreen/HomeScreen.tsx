@@ -1,13 +1,12 @@
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {Tile} from "@/models";
-import {generateNewBoard} from "@/utils";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 import {Button} from "react-native-paper";
 import {Ionicons} from "@expo/vector-icons";
 import TileBar from "@/components/Tile";
 import {StyleSheet} from "react-native";
-import {canMove, replaceTiles} from "@/components/screens/HomeScreen/utils";
+import {canMove, checkBoard, generateNewBoard, replaceTiles} from "@/app/screens/HomeScreen/utils";
 
 const HomeScreen = () => {
   const [board, setBoard] = useState<Tile[]>(generateNewBoard())
@@ -21,6 +20,8 @@ const HomeScreen = () => {
 
     if (canMove(source, target)) setBoard(replaceTiles(board, source, target))
   }
+
+  const isComplete = useMemo(() => checkBoard(board), [board])
 
   return (
     <ThemedView style={styles.container}>
@@ -40,6 +41,7 @@ const HomeScreen = () => {
         )}
       </ThemedView>
 
+      {isComplete && <ThemedText>You are winner!</ThemedText>}
     </ThemedView>
   )
 }
