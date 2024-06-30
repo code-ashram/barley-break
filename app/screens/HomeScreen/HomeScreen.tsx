@@ -2,18 +2,25 @@ import { useMemo, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
 import { Image } from 'expo-image'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import TileBar from '@/components/Tile'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
 
 import { Tile } from '@/models'
-import { canMove, checkBoard, generateNewBoard, replaceTiles } from '@/app/screens/HomeScreen/utils'
+import { canMove, checkBoard, generateNewBoard, replaceTiles, saveScore } from '@/app/screens/HomeScreen/utils'
 import { Ionicons } from '@expo/vector-icons'
 
 const HomeScreen = () => {
   const [board, setBoard] = useState<Tile[]>(generateNewBoard())
   const [step, setStep] = useState<number>(0)
+
+  const isComplete = useMemo(() => {
+    const isDone = checkBoard(board)
+    if (isDone) saveScore(`${step}`).then()
+    return isDone
+  }, [board])
 
   const handleResetBoard = () => {
     setBoard(generateNewBoard())
@@ -28,8 +35,6 @@ const HomeScreen = () => {
       setStep((prevStep) => prevStep + 1)
     }
   }
-
-  const isComplete = useMemo(() => checkBoard(board), [board])
 
   return (
     <ThemedView style={styles.container}>

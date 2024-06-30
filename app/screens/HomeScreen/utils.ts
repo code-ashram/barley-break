@@ -1,4 +1,5 @@
 import {Tile, Position} from '@/models'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const generateNewBoard = (): Tile[] => {
   const board: Tile[] = []
@@ -42,3 +43,11 @@ export const replaceTiles = (board: Tile[], source: Tile | undefined, target: Ti
 
 export const checkBoard = (board: Tile[]): boolean =>
   (board.map((tile) => tile.id).toString() === "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0")
+
+export const saveScore = async (value: string) => {
+  try {
+    await AsyncStorage.setItem('step', value);
+  } catch (e) {
+    // saving error
+  }
+}
