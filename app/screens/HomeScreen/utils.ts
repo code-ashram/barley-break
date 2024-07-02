@@ -1,4 +1,4 @@
-import {Tile, Position} from '@/models'
+import {Tile, Position, Score} from '@/models'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const generateNewBoard = (): Tile[] => {
@@ -44,10 +44,117 @@ export const replaceTiles = (board: Tile[], source: Tile | undefined, target: Ti
 export const checkBoard = (board: Tile[]): boolean =>
   (board.map((tile) => tile.id).toString() === "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0")
 
-export const saveScore = async (value: string) => {
-  try {
-    await AsyncStorage.setItem('step', value);
-  } catch (e) {
-    // saving error
+export const testBoard: Tile[] = [
+  {
+    id: 1,
+    position: {
+      x: 0,
+      y: 0,
+    }
+  },
+  {
+    id: 2,
+    position: {
+      x: 0,
+      y: 1,
+    }
+  },
+  {
+    id: 3,
+    position: {
+      x: 0,
+      y: 2,
+    }
+  },
+  {
+    id: 4,
+    position: {
+      x: 0,
+      y: 3,
+    }
+  },
+  {
+    id: 5,
+    position: {
+      x: 1,
+      y: 0,
+    }
+  },
+  {
+    id: 6,
+    position: {
+      x: 1,
+      y: 1,
+    }
+  },
+  {
+    id: 7,
+    position: {
+      x: 1,
+      y: 2,
+    }
+  },
+  {
+    id: 8,
+    position: {
+      x: 1,
+      y: 3,
+    }
+  },
+  {
+    id: 9,
+    position: {
+      x: 2,
+      y: 0,
+    }
+  },
+  {
+    id: 10,
+    position: {
+      x: 2,
+      y: 1,
+    }
+  },
+  {
+    id: 11,
+    position: {
+      x: 2,
+      y: 2,
+    }
+  },
+  {
+    id: 12,
+    position: {
+      x: 2,
+      y: 3,
+    }
+  },
+  {
+    id: 13,
+    position: {
+      x: 3,
+      y: 0,
+    }
+  },
+  {
+    id: 14,
+    position: {
+      x: 3,
+      y: 1,
+    }
+  },
+  {
+    id: 0,
+    position: {
+      x: 3,
+      y: 3,
   }
-}
+    },
+  {
+    id: 15,
+    position: {
+      x: 3,
+      y: 2,
+    }
+  },
+]

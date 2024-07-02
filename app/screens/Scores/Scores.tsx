@@ -1,18 +1,40 @@
-import { StyleSheet } from 'react-native'
+import {StyleSheet} from 'react-native'
 
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { scoresMock } from '@/app/screens/Scores/score'
+import {useFocusEffect} from 'expo-router';
+import {ThemedText} from '@/components/ThemedText'
+import {ThemedView} from '@/components/ThemedView'
 import ScoresItem from '@/app/screens/Scores/parts/ScoreItem'
+import {Score} from "@/models";
+import {FC, useCallback, useEffect, useState} from "react";
+import {getHistory} from "@/app/utils";
 
-const TabTwoScreen = () =>
-  <ThemedView style={styles.container}>
-    <ThemedText type="title">Scores</ThemedText>
+type Props = {
+  navigation: unknown;
+}
 
-    <ThemedView style={styles.scoresBoard}>
-      {scoresMock.map((score) => <ScoresItem key={score.id} score={score} />)}
-    </ThemedView>
-  </ ThemedView>
+const TabTwoScreen: FC<Props> = ({navigation}) => {
+  const [scores, setScores] = useState<Score[]>([])
+
+  useFocusEffect(
+    useCallback(() => {
+      getHistory().then((response) => setScores(response || []))
+
+      return () => {}
+    }, [])
+  );
+
+  return (
+    <ThemedView style={styles.container}>
+      <ThemedText type="title">Scores</ThemedText>
+
+      <ThemedView style={styles.scoresBoard}>
+        {scores.length
+          ? scores.map((score, index) => <ScoresItem key={index} score={score}/>)
+          : <ThemedText>No results</ThemedText>}
+      </ThemedView>
+    </ ThemedView>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

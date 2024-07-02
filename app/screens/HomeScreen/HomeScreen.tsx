@@ -1,16 +1,16 @@
-import { useMemo, useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { Button } from 'react-native-paper'
-import { Image } from 'expo-image'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import {useMemo, useState} from 'react'
+import {StyleSheet} from 'react-native'
+import {Button} from 'react-native-paper'
+import {Image} from 'expo-image'
 
 import TileBar from '@/components/Tile'
-import { ThemedView } from '@/components/ThemedView'
-import { ThemedText } from '@/components/ThemedText'
+import {ThemedView} from '@/components/ThemedView'
+import {ThemedText} from '@/components/ThemedText'
 
-import { Tile } from '@/models'
-import { canMove, checkBoard, generateNewBoard, replaceTiles, saveScore } from '@/app/screens/HomeScreen/utils'
-import { Ionicons } from '@expo/vector-icons'
+import {Tile} from '@/models'
+import {canMove, checkBoard, generateNewBoard, replaceTiles, testBoard} from '@/app/screens/HomeScreen/utils'
+import {Ionicons} from '@expo/vector-icons'
+import {saveScore} from "@/app/utils";
 
 const HomeScreen = () => {
   const [board, setBoard] = useState<Tile[]>(generateNewBoard())
@@ -18,7 +18,9 @@ const HomeScreen = () => {
 
   const isComplete = useMemo(() => {
     const isDone = checkBoard(board)
-    if (isDone) saveScore(`${step}`).then()
+
+    if (isDone) saveScore(step).then()
+
     return isDone
   }, [board])
 
@@ -44,13 +46,17 @@ const HomeScreen = () => {
         <ThemedText type="title">Your steps: {step}</ThemedText>
 
         <Button mode="contained" buttonColor="#336edc" onPress={handleResetBoard}>
-          <Ionicons name="reload" size={22} color="white" />
+          <Ionicons name="reload" size={22} color="white"/>
+        </Button>
+
+        <Button mode="contained" buttonColor="green" onPress={() => setBoard(testBoard)}>
+          <Ionicons name="scale" size={22} color="white"/>
         </Button>
       </ThemedView>
 
       <ThemedView style={styles.board}>
         {board.map((tile) =>
-          <TileBar key={tile.id} tile={tile} onTap={handleSwapTiles} />
+          <TileBar key={tile.id} tile={tile} onTap={handleSwapTiles}/>
         )}
       </ThemedView>
 
